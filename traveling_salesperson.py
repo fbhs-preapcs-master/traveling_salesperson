@@ -8,19 +8,19 @@ import time
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Traveling Salesperson"
-NUM_CITIES = 3  # increase this one at a time to see what effect it has on how long it takes
-                # to find the shortest path
+
 
 class TravelingSales(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.BLACK)
+        self.num_cities = 3
 
 
     def setup(self):
         self.cities = []
-        for i in range(NUM_CITIES):
+        for i in range(self.num_cities):
             city = arcade.Point(randint(0,SCREEN_WIDTH-1), randint(0,SCREEN_HEIGHT-1))
             self.cities.append(city)
         self.shortest = self.get_total_dist(self.cities)
@@ -36,11 +36,12 @@ class TravelingSales(arcade.Window):
         percent_done = self.current_permutation / (len(self.permutations)-1) * 100
         arcade.draw_text(f'{percent_done:.3f}%',SCREEN_WIDTH//2,30,arcade.color.WHITE,24,anchor_x='center')
         arcade.draw_text(f"Shortest Path: {self.shortest:.3f}",SCREEN_WIDTH//2, SCREEN_HEIGHT-30, arcade.color.WHITE, anchor_x='center')
-        arcade.draw_text(f"Time to Find Shortest Path: {self.total_time:.3f} seconds", 
-                             SCREEN_WIDTH//2,                                                     
-                             SCREEN_HEIGHT - 60,
-                             arcade.color.WHITE,
-                             anchor_x='center')
+        if self.done:
+            arcade.draw_text(f"Time to Find Shortest Path: {self.total_time:.3f} seconds", 
+                                SCREEN_WIDTH//2,                                                     
+                                SCREEN_HEIGHT - 60,
+                                arcade.color.WHITE,
+                                anchor_x='center')
 
     def on_update(self, delta_time):
         if self.current_permutation < len(self.permutations)-1:
@@ -54,6 +55,20 @@ class TravelingSales(arcade.Window):
             self.total_time = time.time() - self.start_time
             self.done = True
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.R:
+            self.setup()
+
+        if key == arcade.key.MINUS:
+            if self.num_cities > 3:
+                self.num_cities -= 1
+                self.setup()
+
+        if key == arcade.key.PLUS or key == arcade.key.EQUAL:
+            self.num_cities += 1
+            self.setup()
+
+        
 
     def distance_between_points(self, point1, point2):
         ''' 
