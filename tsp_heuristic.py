@@ -103,16 +103,12 @@ class TSP_Heuristic(arcade.Window):
         '''
         
         closest = self.distance_between_points(curr_point, points[0])
-        print(f'First: {closest}')
         closest_point = points[0]
         for i in range(1,len(points)):
             dist = self.distance_between_points(curr_point, points[i])
-            print(f'Dist: {dist}')
             if dist < closest:
-                print('New closest!')
                 closest = dist
                 closest_point = points[i]
-        print(f"Closest: {closest_point} Dist: {closest}")
         return closest_point
 
     
