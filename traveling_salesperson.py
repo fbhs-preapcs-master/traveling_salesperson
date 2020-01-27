@@ -31,8 +31,12 @@ class TravelingSales(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
+        
         arcade.draw_points(self.cities,arcade.color.WHITE,10)
-        arcade.draw_line_strip(self.cities, arcade.color.WHITE, 2)
+        if not self.done:
+            arcade.draw_line_strip(self.permutations[self.current_permutation],arcade.color.WHITE,2)
+        arcade.draw_line_strip(self.cities, arcade.color.GREEN, 3)
+        
         percent_done = self.current_permutation / (len(self.permutations)-1) * 100
         arcade.draw_text(f'{percent_done:.3f}%',SCREEN_WIDTH//2,30,arcade.color.WHITE,24,anchor_x='center')
         arcade.draw_text(f"Shortest Path: {self.shortest:.3f}",SCREEN_WIDTH//2, SCREEN_HEIGHT-30, arcade.color.WHITE, anchor_x='center')
